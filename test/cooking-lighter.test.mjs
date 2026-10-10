@@ -1,0 +1,10 @@
+﻿import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createKitchen} from '../src/cooking/state.js';
+import {createCookingPhysics} from '../src/cooking/physics.js';
+import {gestureEnvelope} from '../src/cooking/animation.js';
+const tick=(p,n)=>{for(let i=0;i<n*120;i++)p.step(1/120);};
+test('lighter can be lifted, carried, dropped and picked up without teleporting',()=>{const s=createKitchen(),p=createCookingPhysics(s);tick(p,2);p.beginLighterGrab();p.moveLighter({x:-.1,y:1.5,z:.58});tick(p,2);assert.ok(p.lighter.position.y>1.4);p.endLighterGrab();tick(p,4);assert.ok(p.lighter.position.y>.89&&p.lighter.position.y<1.08);assert.ok(Math.abs(p.lighter.position.x+.1)<.15);assert.ok(p.lighter.velocity.length()<.1);const before=p.lighter.position.clone();p.beginLighterGrab();assert.ok(p.lighter.position.distanceTo(before)<1e-8);assert.deepEqual(s.lighterPose.position,before.toArray());p.dispose();});
+test('old animation times after a clock reset cannot generate runaway arm rotations',()=>{for(const start of [5,500,10000])for(const t of [0,.1,2]){assert.equal(gestureEnvelope(t,start,2.2),0);assert.equal(gestureEnvelope(t,start,.25),0);}assert.equal(gestureEnvelope(10,10,2.2),1);assert.equal(gestureEnvelope(15,10,2.2),0);});
+
+test('lighter stays above the table during aggressive repeated grabs and recovers corrupt saved poses',()=>{const s=createKitchen();s.lighterPose={position:[1,4e7,-1],quaternion:[0,0,0,0]};const p=createCookingPhysics(s);tick(p,.3);assert.ok(p.lighter.position.y<2);for(let n=0;n<30;n++){p.lighter.quaternion.setFromEuler(n*.9,n*.3,n*.7);p.beginLighterGrab();for(let j=0;j<24;j++){p.moveLighter({x:Math.sin(j*.6)*.95,y:j%2?.92:2.1,z:.5});p.step(j%3===0?.25:1/60);assert.ok(p.lighter.position.y>=.9&&p.lighter.position.y<3);assert.ok(p.lighter.velocity.length()<3.01);assert.ok(Math.abs(Math.hypot(...p.lighter.quaternion.toArray())-1)<.001);}p.endLighterGrab();tick(p,.4);}p.lighter.position.y=4e7;tick(p,.1);assert.ok(p.lighter.position.y<2);p.dispose();});

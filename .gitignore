@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+*.zip
+*.map
+runtime/
+.DS_Store
+Thumbs.db
+verification/
+*.local

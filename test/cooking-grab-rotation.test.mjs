@@ -1,0 +1,10 @@
+﻿import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createKitchen,addFood} from '../src/cooking/state.js';
+import {driveContainer} from '../src/cooking/liquid.js';
+import {createCookingPhysics} from '../src/cooking/physics.js';
+const tick=(p,n)=>{for(let i=0;i<n*120;i++)p.step(1/120);};
+const difference=(a,b)=>1-Math.abs(a.x*b.x+a.y*b.y+a.z*b.z+a.w*b.w);
+test('manual bottle direction and pour angle survive movement and auto-aim',()=>{const s=createKitchen(),c=s.containers.oil;c.held=true;c.manualYaw=true;c.yaw=-1.2;c.tilt=1.4;for(let i=0;i<120;i++)driveContainer(s,c,[.3,1.4,.4],1/120);assert.equal(c.yaw,-1.2);assert.equal(c.tilt,1.4);assert.ok(c.pos[1]>1.35);});
+test('held lighter rotates, remains stable, and retains orientation on release',()=>{const p=createCookingPhysics(createKitchen());p.beginLighterGrab();p.moveLighter({x:0,y:1.6,z:.4});tick(p,1);const before=p.lighter.quaternion.clone();for(let i=0;i<5;i++)p.rotateHeld(.2,.1);tick(p,1);assert.ok(difference(before,p.lighter.quaternion)>.1);const q=p.lighter.quaternion.clone();p.endLighterGrab();assert.ok(difference(q,p.lighter.quaternion)<1e-6);tick(p,3);assert.ok(p.lighter.position.y>.88&&p.lighter.position.y<1.2);p.dispose();});
+test('food and pan turn toward manual grab rotation without runaway angular velocity',()=>{const s=createKitchen(),i=addFood(s,'carrot'),p=createCookingPhysics(s);tick(p,2);const b=p.bodies.get(i.id);p.beginGrab(i.id,b.position);p.moveGrab({x:0,y:1.8,z:.4});tick(p,1);const q=b.quaternion.clone();for(let i=0;i<4;i++)p.rotateHeld(.2,.1);tick(p,1);assert.ok(difference(q,b.quaternion)>.05);assert.ok(b.angularVelocity.length()<6);p.endGrab();p.beginPanGrab(p.pan.position);p.movePan({x:.5,y:1.6,z:.1});tick(p,1);const pq=p.pan.quaternion.clone();p.rotateHeld(.25,.25);tick(p,1);assert.ok(difference(pq,p.pan.quaternion)>.004);assert.ok(p.pan.angularVelocity.length()<6);p.endPanGrab();p.dispose();});

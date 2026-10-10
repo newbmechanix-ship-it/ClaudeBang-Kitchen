@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClaudeBang Kitchen</title></head><body>
+<main id="kitchen" aria-label="Interactive three dimensional cooking station"></main>
+<header><div class="eyebrow">CYBERDYNE / EXPERIMENTAL DINING</div><h1>ClaudeBang<br><em>Kitchen.</em></h1><p>A little heat. A very questionable menu.</p></header>
+<aside id="pantry"><div class="section"><span>01 / THE PANTRY</span><span id="piece-count">0 pieces</span></div><div class="ingredients">
+<button data-food="carrot"><i class="carrot">╱</i><span>Carrot<small>sweet · crisp</small></span><b>+</b></button>
+<button data-food="zucchini"><i class="zucchini">╱</i><span>Zucchini<small>soft · golden</small></span><b>+</b></button>
+<button data-food="tomato"><i class="tomato">●</i><span>Tomato<small>juicy · bright</small></span><b>+</b></button>
+<button data-food="pasta"><i class="pasta">▰</i><span>Rigatoni<small>straight into the pot</small></span><b>+</b></button>
+<button data-food="claude" class="fish-card"><i>⌁</i><span>Fish-Claude<small>T-800 / questionable catch</small></span><b>+</b></button>
+</div><button id="fish-pan" class="wide subtle">+ Add a Claude directly to the pan</button><div class="section second"><span>02 / THE STATION</span><button id="view">Reset view</button></div>
+<div class="segments" role="group" aria-label="Cooking vessel"><button id="pan" aria-pressed="true">Frying pan</button><button id="pot" aria-pressed="false">Pasta pot</button></div>
+<div class="pour liquid-readouts"><span>Oil <small id="oil-level">bottle full</small></span><span>Water <small id="water-level">jug full</small></span></div>
+<div id="pour-control" aria-label="Pouring status"><div class="pour-heading"><span id="tilt-target">TILT / NOTHING HELD</span><strong id="tilt-value">?</strong></div><p id="pour-status" class="fine">Click to pick up/drop. Hold right mouse and move to rotate. Scroll to lift. F lights the lighter; Q/E tilt bottles.</p></div>
+<label class="knob-label" for="gas"><span>GAS VALVE</span><strong id="gas-value">OFF</strong></label><input id="gas" aria-label="Gas valve" type="range" min="0" max="100" value="0"><div class="heat-readout"><span id="flame-status">● UNLIT</span><b><span id="temperature">22</span>°C</b></div>
+<p class="fine">Move the pan aside. Open the gas, then light the exposed brass nozzle.</p><button id="dock-pan" class="wide subtle">Return pan to burner</button><button id="transfer" class="wide">Sweep board → pan</button><div class="segments actions"><button id="toss">Toss / stir</button><button id="serve">Plate the dish ↗</button></div>
+<div class="section second"><span>03 / THE EXPERIENCE</span><span id="mode">COLD PAN</span></div><div class="cook-track"><span id="cook-fill"></span></div><p id="doneness">Your station is ready.</p><div id="recipe"><b>TRY THIS / GOLDEN VEGETABLES</b><span id="recipe-steps">Slice → oil → ignite → golden → serve</span></div>
+<button id="mukbang-panel" class="wide" disabled>Mukbang · DeepSeek eats the dish</button>
+<div class="toggles"><button id="subtitles" aria-pressed="true">Subtitles on</button><button id="sound" aria-pressed="true">Sound on</button><button id="agent" aria-pressed="true">Claude agent on</button><button id="chef" aria-pressed="true">DeepSeek chef on</button></div><p id="brain-status">Optional fish dialogue · configure your own API key to enable</p><p id="chef-status" role="status">DeepSeek · listening</p><button id="recover" class="subtle wide">Recover dropped food</button><button id="clear" class="subtle wide">Clear station / fresh ingredients</button></aside>
+<nav id="tools" aria-label="Cooking tools"><button data-tool="hand" aria-pressed="false"><kbd>1</kbd> Grab</button><button data-tool="knife" aria-pressed="true"><kbd>2</kbd> Knife</button><button data-tool="spatula" aria-pressed="false"><kbd>4</kbd> Spatula</button></nav>
+<div id="hint"><span id="hint-label">KNIFE / CLICK TO SLICE</span><p id="hint-text">Point at an ingredient. Every cut lands under the blade.</p></div><div id="toast" role="status" aria-live="polite"></div>
+<div id="subtitles-area" aria-label="Character subtitles"><section id="dialogue" aria-label="Claude subtitles" aria-live="polite" hidden><span id="speaker"></span><p id="line"></p></section>
+<section id="chef-sub" aria-label="DeepSeek English subtitles" aria-live="polite" hidden><span>DEEPSEEK / CHEF</span><p id="chef-en" lang="en"></p></section></div>
+<section id="dish" hidden><span>SERVICE COMPLETE</span><h2 id="dish-title">A dish worth remembering.</h2><strong id="score"></strong><p id="dish-note"></p><div class="dish-actions"><button id="continue">Back to the kitchen</button><button id="mukbang">Watch DeepSeek eat it</button></div></section>
+<section id="mukbang-bar" hidden aria-label="Mukbang controls"><span id="mukbang-status">MUKBANG</span><button id="mukbang-stop">Stop eating</button><button id="mukbang-back">Return to cooking</button></section>
+<footer><span id="audio-status">Click any control to enable audio</span><span>CLICK: PICK UP / DROP / RIGHT-DRAG: ROTATE / SCROLL: LIFT / F: LIGHTER</span></footer>
+<script type="module" src="/src/cooking/main.js"></script></body></html>
